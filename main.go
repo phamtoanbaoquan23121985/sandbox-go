@@ -20,6 +20,7 @@ func servePage(filename string) http.HandlerFunc {
 func main() {
 	http.HandleFunc("/", servePage("home.html"))
 	http.HandleFunc("/about", servePage("about.html"))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	fmt.Println("Server running at port 8080")
 	http.ListenAndServe(":8080", nil)
