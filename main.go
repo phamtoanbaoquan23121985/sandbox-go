@@ -1,33 +1,26 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"os"
 )
 
-// activity is a Sandbox activity.
-type activity struct {
-	Title string `json:"title"`
-	URL   string `json:"url"`
-}
-
-// list of activities.
-var activities = []activity{
-	{Title: "More activities)", URL: "https://developers.redhat.com/developer-sandbox/activities"},
-	{Title: "Create an OpenShift Serverless function", URL: "https://developers.redhat.com/developer-sandbox/activities/create-openshift-serverless-function"},
-	{Title: "Deploy a Java Application on Kubernetes in minutes", URL: "https://developers.redhat.com/developer-sandbox/activities/how-to-deploy-java-application-in-kubernetes"},
-	{Title: "Learn Kubernetes", URL: "https://developers.redhat.com/developer-sandbox/activities/learn-kubernetes-using-red-hat-developer-sandbox-openshift"},
-}
-
-// list as JSON
-func getActivities(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, activities)
+func servePage(filename string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		content, err := os.ReadFile(filename)
+		if err != nil {
+			http.Error(w, "Page not found", http.StatusNotFound)
+			return
+		}
+		w.Write(content)
+	}
 }
 
 func main() {
-	router := gin.Default()
-	router.GET("/", getActivities)
+	http.HandleFunc("/", servePage("home.html"))
+	http.HandleFunc("/about", servePage("about.html"))
 
-	router.Run("0.0.0.0:8080")
+	fmt.Println("Server running at port 8080")
+	http.ListenAndServe(":8080", nil)
 }
