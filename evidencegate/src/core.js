@@ -1,0 +1,2 @@
+export function evaluateClaim({claim, evidence=[]}) { const checked=evidence.filter(e=>e.verified===true); if(checked.some(e=>e.supports===false)) return {claim,status:'CONTRADICTED',verifiedEvidence:checked.length}; if(checked.some(e=>e.supports===true)) return {claim,status:'VERIFIED',verifiedEvidence:checked.length}; return {claim,status:'UNSUPPORTED',verifiedEvidence:0}; }
+export function summarize(results){const out={VERIFIED:0,UNSUPPORTED:0,CONTRADICTED:0};for(const r of results)if(r.status in out)out[r.status]++;return out;}
