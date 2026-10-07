@@ -1,0 +1,1 @@
+export function validateTryOnInput(x){if(!x?.shopper)throw new Error('shopper image required');if(!x?.garment)throw new Error('garment image required');return true}export function scoreLook({preferenceFit=0,confidence=0,returnRisk=0}){return Math.round((.55*preferenceFit+.35*confidence-.30*returnRisk)*100)/100}

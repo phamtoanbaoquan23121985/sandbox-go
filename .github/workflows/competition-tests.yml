@@ -1,0 +1,20 @@
+name: competition-tests
+on:
+  push:
+    branches: [competition-submissions]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [evidencegate, wardrobe-proof-youcam]
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
